@@ -53,7 +53,8 @@ function makeBodyContents( ... )
 		print("value : " .. message[i].value);
 	end
 	--]]
-	-- XML 로드하여 페이지를 나눈다.
+
+	--[[ XML 로드하여 페이지를 나눈다.
 	local xml = require( "xml" ).newParser()
 	local tree = xml:loadFile( "sample.xml" )
 	local message = {}
@@ -65,14 +66,12 @@ function makeBodyContents( ... )
 		print("value : " .. message[i].value);
 		-- if message[i].name == "text" then
 		local alinenum = countTextLine(message[i].value)
-		local obj = display.newText(message[i].value, 0, line*25, 304, 300, null, 16);
+		local obj = display.newText(message[i].value, 0, line*25, 304, alinenum*25 +15, null, 16);
 		contents:insert(obj)
 		line = line + alinenum
-		print( "line : " .. line .. " " .. alinenum )
-
 		-- end
 	end
-
+	--]]
 	
 	return Body
 end
