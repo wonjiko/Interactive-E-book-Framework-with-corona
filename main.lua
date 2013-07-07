@@ -144,6 +144,7 @@ function makeVerseIndexChooser(numOfVerse)
 	end
 end
 makeVerseIndexChooser(5);
+
 -- TODO body 설정
 local bodyViewGroup = display.newGroup();
 
