@@ -7,8 +7,8 @@ module(..., package.seeall)
 -- #programmer Cheechyo, LnS in JejuUniv.
 ------------------------------------------------------------------------------------------
 
-function makeHeadIndex()
-	Head = {}
+function makeHeadIndex(nChapther, nVerse)
+	local Head = {}
 
 	-- 페이지에 사용될 변수/상수들을 정의하고 초기화한다.
 	local _currentChapterIntex = -1;
@@ -20,9 +20,6 @@ function makeHeadIndex()
 	local _currentPageIndex = -1;
 	local _minPageIndex = -1;
 	local _maxPageIndex = -1;
-
-	local isXmlLoad = false;
-	-- TODO xml 파일을 로드한다.
 
 	-- head 설정.
 	-- TODO head에는 장(chapter)과 절(verse)을 보여주고, 현재 선택된 장(chapter)과 절(verse)이 어떤것인지 색깔로 표현한다.
@@ -119,7 +116,7 @@ function makeHeadIndex()
 		end
 		-- 장 인덱스를 그리는 부분
 		for i = 0, _maxVerseIndex, 1 do
-		local aVerseIndexView = display.newText((i+1).."절", verseMargin + versePadding + i * verseIndexWidth + 6, display.statusBarHeight+53, null, 16);
+			local aVerseIndexView = display.newText((i+1).."절", verseMargin + versePadding + i * verseIndexWidth + 6, display.statusBarHeight+53, null, 16);
 			function aVerseIndexView:tap(event)
 				print("Tapped index : " .. i);
 				gotoChapter(i);
@@ -140,7 +137,8 @@ function makeHeadIndex()
 	end
 
 	Head.headViewGroup = headViewGroup
-	
+	Head:makeChapterIndexChooser(nChapther)
+	Head:makeVerseIndexChooser(nVerse)
 	return Head
 end
 
