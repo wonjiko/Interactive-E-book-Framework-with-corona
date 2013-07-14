@@ -109,7 +109,7 @@ function makeHeadIndex(nChapther, nVerse)
 			-- 장수가 짝수일때 (index는 홀수)
 			versePadding = versePadding + 24;
 			if _maxVerseIndex == 1 then
-				versePadding = versePadding + 48;
+				versePadding = versePadding + 38;
 			else
 				versePadding = versePadding;
 			end

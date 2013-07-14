@@ -15,7 +15,7 @@ backgroundImage.y = display.contentHeight / 2 + display.statusBarHeight;
 -- #programmer Cheechyo, LnS in JejuUniv.
 
 -- HEAD 설정
-local head = require("headindex").makeHeadIndex(3,3)
+local head = require("headindex").makeHeadIndex(5,5)
 
 -- TODO body 설정
 local body = require("body").makeBodyContents()
