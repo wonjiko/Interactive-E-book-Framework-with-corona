@@ -18,7 +18,7 @@ backgroundImage.y = display.contentHeight / 2 + display.statusBarHeight;
 local head = require("headindex").makeHeadIndex(5,5)
 
 -- TODO body 설정
-local body = require("body").makeBodyContents()
+local body = require("body").makeBodyContents("doc/document.xml")
 
 -- Foot 설정.
 local foot = require("foot").makeFootController()
