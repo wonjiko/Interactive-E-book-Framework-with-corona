@@ -173,7 +173,7 @@ function makeBodyContents( path )
 					end
 				end
 				if message[i].name == "page" then
-					
+
 				elseif message[i].name == "text" then
 					local alinenum = Body:countTextLine( message[i].value )
 
@@ -195,7 +195,7 @@ function makeBodyContents( path )
 					obj.width = obj.height / obj.width * 40
 					obj.height = 40
 					obj.x = display.contentWidth/2
-					obj.y = line*25+20
+					obj.y = line*25 + 5
 					local imgmod = require("imagemodule").ImageModule( path )
 
 					-- 터치했을때 확대, 축소
@@ -205,13 +205,33 @@ function makeBodyContents( path )
 					obj:addEventListener("tap",obj)
 					contents:insert(obj)
 					line = line + alinenum
-				else
-					local alinenum = Body:countTextLine(message[i].value)
+				elseif message[i].name == "video" then
+					local path = message[i].value:gsub("^%s*(.-)%s*$", "%1")
+					local alinenum = Body:countTextLine( path )
 					-- 페이지 한도가 넘어가면 그만 그리기
 					if ( line + alinenum > 13 ) then
 						break
 					end
-					local obj = display.newText(message[i].value, 0, line*25, 304, alinenum*25, null, 16);
+					local obj = display.newText(path, 0, line * 25, 304, alinenum * 25, null, 16);
+					contents:insert(obj)
+					line = line + alinenum
+				elseif message[i].name == "audio" then
+					local path = message[i].value:gsub("^%s*(.-)%s*$", "%1")
+					local alinenum = Body:countTextLine( path )
+					-- 페이지 한도가 넘어가면 그만 그리기
+					if ( line + alinenum > 13 ) then
+						break
+					end
+					local obj = display.newText(path, 0, line * 25, 304, alinenum * 25, null, 16);
+					contents:insert(obj)
+					line = line + alinenum
+				else
+					local alinenum = Body:countTextLine(message[i].value:gsub("^%s*(.-)%s*$", "%1"))
+					-- 페이지 한도가 넘어가면 그만 그리기
+					if ( line + alinenum > 13 ) then
+						break
+					end
+					local obj = display.newText(message[i].value, 0, line * 25, 304, alinenum * 25, null, 16);
 					contents:insert(obj)
 					line = line + alinenum
 				end
@@ -224,7 +244,7 @@ function makeBodyContents( path )
 		contents = display.newGroup()
 	end
 	--Body:loadFirstPage()
-	Body:loadPage(1)
+	Body:loadPage(2)
 	print("BODY END")
 	return Body
 end
