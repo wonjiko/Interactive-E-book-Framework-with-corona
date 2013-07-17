@@ -6,7 +6,7 @@ module(..., package.seeall)
 -- 가로 320 세로 325의 부분을 내용들로 채우는 부분
 -----------------------------------------------------------------------------------------
 
-function makeBodyContents( path )
+function makeBodyContents( docPath )
 	Body = {}
 	--[[ body부분을 하얗게 칠함
 	local bodybg = display.newRect(0, display.statusBarHeight+10+80, display.contentWidth, 325) 
@@ -50,15 +50,15 @@ function makeBodyContents( path )
 		local xml = require( "xml" ).newParser()
 		local tree
 		
-		if path == nil then
+		if docPath == nil then
 			tree = xml:loadFile( "doc/document.xml" )
 		else
-			tree = xml:loadFile( path )
+			tree = xml:loadFile( docPath )
 		end
 
 		Body.pageIndex = 0
 		Body.maxPageIndex = Body:countXMLPage(tree)
-		print( "pageIndex : " .. Body.pageIndex .. " / " .. Body.maxPageIndex )		
+		--print( "pageIndex : " .. Body.pageIndex .. " / " .. Body.maxPageIndex )		
 		
 		local message = {}
 		-- for each "child" in the contents table...
@@ -138,15 +138,15 @@ function makeBodyContents( path )
 		local xml = require( "xml" ).newParser()
 		local tree
 		
-		if path == nil then
+		if docPath == nil then
 			tree = xml:loadFile( "doc/document.xml" )
 		else
-			tree = xml:loadFile( path )
+			tree = xml:loadFile( docPath )
 		end
 
 		Body.pageIndex = pageIndex
 		Body.maxPageIndex = Body:countXMLPage(tree)
-		print( "pageIndex : " .. Body.pageIndex .. " / " .. Body.maxPageIndex )
+		--print( "pageIndex : " .. Body.pageIndex .. " / " .. Body.maxPageIndex )
 		
 		
 		local message = {}
@@ -155,7 +155,7 @@ function makeBodyContents( path )
 		local flag = false
 		for i=1,#tree.child do
 			message[i] = tree.child[i]
-			---[[
+			--[[
 			print("name : " .. message[i].name);
 			print("value : " .. message[i].value);
 			--]]

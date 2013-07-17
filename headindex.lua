@@ -10,6 +10,8 @@ module(..., package.seeall)
 function makeHeadIndex(nChapther, nVerse)
 	local Head = {}
 
+	local DEBUG = true 
+
 	-- 페이지에 사용될 변수/상수들을 정의하고 초기화한다.
 	local _currentChapterIntex = -1;
 	local _maxChapterIndex = -1;
@@ -139,6 +141,19 @@ function makeHeadIndex(nChapther, nVerse)
 	Head.headViewGroup = headViewGroup
 	Head:makeChapterIndexChooser(nChapther)
 	Head:makeVerseIndexChooser(nVerse)
+
+	--[[  경로를 열어서 파일 목록을 가져온다. 앱 내의 데이터를 사용하여 동작하지 않는다.
+	local lfs = require "lfs"
+
+	local doc_path = system.pathForFile( "", system.DocumentsDirectory ) .. "/doc"
+	print("path : " .. doc_path)
+	for file in lfs.dir(doc_path) do
+    	-- file is the current file or directory name
+    	if DEBUG then
+    		print( "Found file: " .. file )
+    	end
+	end
+	--]]
 	return Head
 end
 
