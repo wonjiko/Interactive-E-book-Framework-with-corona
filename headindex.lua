@@ -13,20 +13,22 @@ function makeHeadIndex(nChapther, nVerse)
 	local DEBUG = true 
 
 	-- 페이지에 사용될 변수/상수들을 정의하고 초기화한다.
-	local _currentChapterIntex = -1;
-	local _maxChapterIndex = -1;
-	local _minChapterIndex = -1;
-	local _currentVerseIndex = -1;
-	local _maxVerseIndex = -1;
-	local _minVerseIndex = -1;
-	local _currentPageIndex = -1;
-	local _minPageIndex = -1;
-	local _maxPageIndex = -1;
+	--local _currentChapterIntex = -1;
+	--local _maxChapterIndex = -1;
+	--local _minChapterIndex = -1;
+	--local _currentVerseIndex = -1;
+	--local _maxVerseIndex = -1;
+	--local _minVerseIndex = -1;
+	--local _currentPageIndex = -1;
+	--local _minPageIndex = -1;
+	--local _maxPageIndex = -1;
 
 	-- head 설정.
 	-- TODO head에는 장(chapter)과 절(verse)을 보여주고, 현재 선택된 장(chapter)과 절(verse)이 어떤것인지 색깔로 표현한다.
 	local headViewGroup = display.newGroup();
-
+	local verseViewGroup = display.newGroup();
+	Head.chapterViewArr = {}
+	Head.verseViewArr = {}
 	-- chapter를 나타내는 버튼을 만든다.
 	-- @param 
 	--  numOfChapter : 장의 전체 갯수를 입력한다. 현재 0 ~ 5 까지 지원한다.
@@ -35,8 +37,9 @@ function makeHeadIndex(nChapther, nVerse)
 			print("function makeChapterIndexChooser : Out Of num - numOfChapter is 0 ~ 5");
 			return;
 		end
-		_maxChapterIndex = numOfChapter -1;
-		_minChapterIndex = 0;
+		local _maxChapterIndex = numOfChapter -1;
+		local _minChapterIndex = 0;
+
 		local chapterIndexViewGroup = display.newGroup();
 		local chapterMargin = 40;
 		local chapterIndexWidth = 48;
@@ -63,13 +66,14 @@ function makeHeadIndex(nChapther, nVerse)
 		end
 		-- 장 인덱스를 그리는 부분
 		for i = 0, _maxChapterIndex, 1 do
-		local aVerseIndexView = display.newText((i+1).."장", chapterMargin + chapterPadding + i * chapterIndexWidth + 6, display.statusBarHeight+13, null, 20);
+			local aVerseIndexView = display.newText((i+1).."장", chapterMargin + chapterPadding + i * chapterIndexWidth + 6, display.statusBarHeight+13, null, 20);
+			Head.chapterViewArr[i] = aVerseIndexView;
 			function aVerseIndexView:tap(event)
 				print("Tapped index : " .. i);
 				gotoChapter(i);
 			end
 			aVerseIndexView:addEventListener("tap", aVerseIndexView);
-				chapterIndexViewGroup:insert(aVerseIndexView);
+			chapterIndexViewGroup:insert(aVerseIndexView);
 			headViewGroup:insert(aVerseIndexView);
 			-- 모서리가 각진 네모
 			--local aRect = display.newRect(chapterMargin + chapterPadding + i * chapterIndexWidth, display.statusBarHeight+10, 42, 30)
@@ -83,13 +87,19 @@ function makeHeadIndex(nChapther, nVerse)
 		end
 	end
 
+	-- verse를 나타내는 버튼을 만든다.
+	-- @param 
+	--  numOfVerse : 절의 전체 갯수를 입력한다. 현재 0 ~ 5 까지 지원한다.
 	function Head:makeVerseIndexChooser(numOfVerse)
+		if #Head.verseViewArr >= 1 then
+			Head:removeVerseIndexView()
+		end
 		if numOfVerse < 0 or 5 < numOfVerse then
 			print("function makeChapterIndexChooser : Out Of num - numOfVerse is 0 ~ 5 ..." .. numOfVerse);
 			return;
 		end
-		_maxVerseIndex = numOfVerse -1;
-		_minVerseIndex = 0;
+		local _maxVerseIndex = numOfVerse -1;
+		local _minVerseIndex = 0;
 		local verseIndexViewGroup = display.newGroup();
 		-- 전체적인 아이콘들의 x위치
 		local verseMargin = 60;
@@ -119,12 +129,13 @@ function makeHeadIndex(nChapther, nVerse)
 		-- 장 인덱스를 그리는 부분
 		for i = 0, _maxVerseIndex, 1 do
 			local aVerseIndexView = display.newText((i+1).."절", verseMargin + versePadding + i * verseIndexWidth + 6, display.statusBarHeight+53, null, 16);
+			Head.verseViewArr[i] = aVerseIndexView
+			verseViewGroup:insert(aVerseIndexView)
 			function aVerseIndexView:tap(event)
 				print("Tapped index : " .. i);
-				gotoChapter(i);
 			end
 			aVerseIndexView:addEventListener("tap", aVerseIndexView);
-				verseIndexViewGroup:insert(aVerseIndexView);
+			verseIndexViewGroup:insert(aVerseIndexView);
 			headViewGroup:insert(aVerseIndexView);
 			-- 모서리가 각진 네모
 			--local aRect = display.newRect(verseMargin + versePadding + i * verseIndexWidth, display.statusBarHeight+10, 42, 30)
@@ -138,25 +149,18 @@ function makeHeadIndex(nChapther, nVerse)
 		end
 	end
 
+	function Head:removeVerseIndexView()
+		verseViewGroup.isVisible = false;
+		verseViewGroup:removeSelf()
+		verseViewGroup = display.newGroup()
+		Head.verseViewArr = {}
+	end
 	Head.headViewGroup = headViewGroup
 	Head:makeChapterIndexChooser(nChapther)
-	Head:makeVerseIndexChooser(nVerse)
-
-	--[[  경로를 열어서 파일 목록을 가져온다. 앱 내의 데이터를 사용하여 동작하지 않는다.
-	local lfs = require "lfs"
-
-	local doc_path = system.pathForFile( "", system.DocumentsDirectory ) .. "/doc"
-	print("path : " .. doc_path)
-	for file in lfs.dir(doc_path) do
-    	-- file is the current file or directory name
-    	if DEBUG then
-    		print( "Found file: " .. file )
-    	end
+	if nVerse ~= nil then
+		Head:makeVerseIndexChooser(nVerse)
 	end
-	--]]
+
+	---[[  경로를 열어서 파일 목록을 가져온다. 앱 내의 데이터를 사용해야 한다.
 	return Head
 end
-
-
-
-

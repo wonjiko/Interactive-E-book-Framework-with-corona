@@ -1,6 +1,4 @@
-function main( )
-	loadAudioPlayer(100,300,"b1a4.mp3")
-end
+module(..., package.seeall)
 
 function loadAudioPlayer(xPoint, yPoint, soundPath)
 
@@ -148,7 +146,4 @@ function loadAudioPlayer(xPoint, yPoint, soundPath)
 	-- Event
 	spriteButton:addEventListener("tap",buttontap)
 	stopButton:addEventListener("tap",stopButton)
-
 end
-
-main()

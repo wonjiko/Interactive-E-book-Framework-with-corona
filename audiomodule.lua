@@ -1,6 +1,4 @@
-function main( )
-	loadAudioPlayer(100,300,"b1a4.mp3")
-end
+module(..., package.seeall)
 
 function loadAudioPlayer(xPoint, yPoint, soundPath)
 
@@ -37,7 +35,7 @@ function loadAudioPlayer(xPoint, yPoint, soundPath)
 	curProgress:setFillColor(244, 204, 106)
 	curProgress:setReferencePoint(display.TopLeftReferencePoint)
 	curProgress.x = xPoint+56
-	curProgress.y = yPoint
+	curProgress.y = yPoint-5
 	curProgress.isVisible = false
 
 	-- 화면 : 숫자로 된 초기 Timer 추가
@@ -150,5 +148,3 @@ function loadAudioPlayer(xPoint, yPoint, soundPath)
 	stopButton:addEventListener("tap",stopButton)
 
 end
-
-main()

@@ -12,12 +12,13 @@ function makeBodyContents( docPath )
 	local bodybg = display.newRect(0, display.statusBarHeight+10+80, display.contentWidth, 325) 
 	--]]
 	local MAX_LINE_NUM = 13
-
+	local CONTENTS_TOP_MAGIN = display.statusBarHeight+10+80
 	Body.pageIndex = -1;
 	Body.maxPageIndex = -1;
 	local contents = display.newGroup()
 	contents.x = 9
-	contents.y = display.statusBarHeight+10+80
+	contents.y = CONTENTS_TOP_MAGIN
+
 
 	function Body:countTextLine( textString )
 		local num = 0
@@ -45,6 +46,7 @@ function makeBodyContents( docPath )
 		return math.floor( Body:countXMLLine( xmlTree ) / MAX_LINE_NUM ) + 1
 	end
 
+	-- @defrecated loadPage(1)을 사용
 	function Body:loadFirstPage()
 		---[[ XML 로드하여 페이지를 나눈다.
 		local xml = require( "xml" ).newParser()
@@ -117,7 +119,13 @@ function makeBodyContents( docPath )
 				if ( line + alinenum > 13 ) then
 					break
 				end
-				local obj = display.newText(path, 0, line * 25, 304, alinenum * 25, null, 16);
+				print("load Audio")
+				require("audio")
+				local obj = loadAudioPlayer(0, line * 25, path)
+				--display.newText(path, 0, line * 25, 304, alinenum * 25, null, 16);
+				--local obj = display.newText(path, 0, line * 25, 304, alinenum * 25, null, 16);
+				-- FIXME View object를 등록할 수 없었음
+
 				contents:insert(obj)
 				line = line + alinenum
 			else
@@ -222,8 +230,14 @@ function makeBodyContents( docPath )
 					if ( line + alinenum > 13 ) then
 						break
 					end
-					local obj = display.newText(path, 0, line * 25, 304, alinenum * 25, null, 16);
-					contents:insert(obj)
+					---[[오디오 로드
+					local audio = require("audiomodule")
+					audio.loadAudioPlayer(30, line * 25 + CONTENTS_TOP_MAGIN, path)
+					--]]
+					-- display.newText(path, 9, line * 25 + CONTENTS_TOP_MAGIN, 304, alinenum * 25, null, 16);
+					--local obj = display.newText(path, 0, line * 25, 304, alinenum * 25, null, 16);
+					-- FIXME View object를 등록할 수 없었음
+					-- contents:insert(obj)
 					line = line + alinenum
 				else
 					local alinenum = Body:countTextLine(message[i].value:gsub("^%s*(.-)%s*$", "%1"))
@@ -244,7 +258,7 @@ function makeBodyContents( docPath )
 		contents = display.newGroup()
 	end
 	--Body:loadFirstPage()
-	Body:loadPage(2)
+	Body:loadPage(1)
 	print("BODY END")
 	return Body
 end
